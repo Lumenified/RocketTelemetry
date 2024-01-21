@@ -32,7 +32,7 @@ export-env {
       }
     }
 
-    let virtual_env = 'C:\Users\Lumenified\OneDrive\Belgeler\Repos\MiltronApp\backend'
+    let virtual_env = 'C:\Users\Lumenified\OneDrive\Belgeler\GitHub\RocketTelemetry\backend'
     let bin = 'Scripts'
 
     let is_windows = ($nu.os-info.family) == 'windows'

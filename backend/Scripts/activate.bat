@@ -1,4 +1,4 @@
-@set "VIRTUAL_ENV=C:\Users\Lumenified\OneDrive\Belgeler\Repos\MiltronApp\backend"
+@set "VIRTUAL_ENV=C:\Users\Lumenified\OneDrive\Belgeler\GitHub\RocketTelemetry\backend"
 
 @set "VIRTUAL_ENV_PROMPT="
 @if NOT DEFINED VIRTUAL_ENV_PROMPT (
