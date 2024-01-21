@@ -6,7 +6,7 @@ Change directory to backend by typing:
 ```bash
 cd ./backend
 ```
-Create the virtualenv in python:
+Create the virtualenv in python: // If you don't have please install by typing **"python -m pip install virtualenv"** and if you get an error such as "error: externally-managed-environment" **"sudo apt install python3-virtualenv"**
 ```bash
 python -m virtualenv venv
 ```
