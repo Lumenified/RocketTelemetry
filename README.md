@@ -1,6 +1,6 @@
 # Realtime tocket telemetry with socket. Built with flask and react.
 
-##How to run:
+## How to run:
 ### Backend
 activate the virtualenv in python then install the necessary libraries in virtualenv by typing **"pip install -r ./requirements.txt."** then **"python ./app.py"**. The project will on localhost:8080
 
