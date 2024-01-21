@@ -1,4 +1,4 @@
-# Realtime tocket telemetry with socket. Built with flask and react.
+# Realtime rocket telemetry with socket. Built with flask and react.
 
 ## How to run:
 ### Backend
