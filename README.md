@@ -30,11 +30,11 @@ python ./app.py
 The project will run on localhost:8080.
 
 ### Frontend
-Change directory to frontend. By typing:
+Change directory to frontend. You'll install the necessary dependencies by typing:
 ```bash
 npm install
 ```
-You'll install the dependencies into node_modules folder (currently ignored by .gitignore file). Then type:
+To start the react app, type:
 ```bash
 npm start
 ``` 
