@@ -2,7 +2,40 @@
 
 ## How to run:
 ### Backend
-Change directory to backend by typing **"cd ./backend"**. Create the virtualenv in python **"python -m virtualenv venv"** then activate it (for windows: **"./venv/Scripts/activate"** for linux: **"source ./venv/bin/activate"**) then install the necessary libraries in virtualenv by typing **"pip install -r ./requirements.txt."**. Finally **"python ./app.py"**. The project will run on localhost:8080.
+Change directory to backend by typing:
+```bash
+cd ./backend
+```
+Create the virtualenv in python:
+```bash
+python -m virtualenv venv
+```
+Then activate it.
+For windows: 
+```bash
+./venv/Scripts/activate
+```
+For linux: 
+```bash
+source ./venv/bin/activate
+```
+Then install the necessary libraries in virtualenv by typing:
+```bash
+pip install -r ./requirements.txt
+```
+Finally:
+```bash
+python ./app.py
+``` 
+The project will run on localhost:8080.
 
 ### Frontend
-Change directory to frontend. By typing **"npm install"** you'll install the dependencies into node_modules folder (currently ignored by .gitignore file). Then type **"npm start"**. The react app will run on localhost:3000.
+Change directory to frontend. By typing:
+```bash
+npm install
+```
+You'll install the dependencies into node_modules folder (currently ignored by .gitignore file). Then type:
+```bash
+npm start
+``` 
+The react app will run on localhost:3000.
