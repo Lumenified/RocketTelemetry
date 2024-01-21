@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+    <pre id="data"></pre>
+    <pre id="weatherData"></pre>
+
+    <script>
+    var socket = io.connect('http://localhost:8080');
+    socket.on('update_data', function(rocket_data) {
+        // Update the page with the new data
+        console.log(rocket_data);  // Replace data_list with data
+    });
+    var rockets = {{ rockets|tojson|safe }};
+    var weather = {{ weather|tojson|safe }};
+    //console.log(rockets);
+    document.getElementById('weatherData').textContent = JSON.stringify(weather, null, 2);
+    </script>
+</body>
+</html>
