@@ -41,12 +41,14 @@
 }
 .content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .dark-theme {
   background-color: #333;
   color: #fff;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .dark-theme .mdb-card-title,
@@ -57,8 +59,7 @@
 .flex-column {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 i.large-icon {

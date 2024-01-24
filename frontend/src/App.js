@@ -3,6 +3,7 @@ import Weather from './components/Weather';
 import RocketList from './components/RocketList';
 import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Grid } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -36,41 +37,56 @@ function App() {
     fetchData();
   }, []);
 
+<<<<<<< HEAD
+  const updateRocket = (updatedRocket) => {
+    setData((prevData) => {
+      return {
+        ...prevData,
+        rockets: prevData.rockets.map((rocket) =>
+          rocket.id === updatedRocket.id ? updatedRocket : rocket
+        ),
+      };
+    });
+  };
+=======
   if (isInitialFetch && isLoading) {
     return <div>Loading...</div>;
   }
 
+>>>>>>> d6502e7b04ab2d6b5b3c5de44642db5296f7c7f2
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <header className="App-header">
-        <div className='content flex-column d-flex justify-content-center align-items-center'>
-    <MDBCard style={{ width: "50rem"}}>
-      <MDBCardBody>
-        <MDBCardTitle>Weather</MDBCardTitle>
-        <div>
-          <Weather weather={data.weather} />
-        </div>
-      </MDBCardBody>
-    </MDBCard>
-            <MDBCard className="dark-theme">
-              <MDBCardBody>
-                <MDBCardTitle>Rocket List</MDBCardTitle>
-                <div>
-                  <RocketList data={data.rockets} />
-                </div>
-              </MDBCardBody>
-            </MDBCard>
-          </div>
-        </header>
-      </div>
-    </ThemeProvider>
-  );
+  <ThemeProvider theme={theme}>
+    <header className="App-header">
+      <Grid container direction="row" alignItems="center" justify="center" spacing={2}>
+        <Grid item xs={12} sm={12} md={12}>
+          <MDBCard>
+            <MDBCardBody>
+              <MDBCardTitle>Weather</MDBCardTitle>
+              <div>
+                <Weather weather={data.weather} />
+              </div>
+            </MDBCardBody>
+          </MDBCard>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <MDBCard className="dark-theme">
+            <MDBCardBody>
+              <MDBCardTitle>Rocket List</MDBCardTitle>
+              <div>
+                <RocketList rockets={data.rockets} updateRocket={updateRocket} />
+              </div>
+            </MDBCardBody>
+          </MDBCard>
+        </Grid>
+      </Grid>
+    </header>
+  </ThemeProvider>
+);
 }
 
 export default App;

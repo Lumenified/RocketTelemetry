@@ -121,6 +121,7 @@ def handle_connect():
         thread = threading.Thread(target=fetch_data, args=(sockets,))
         thread_counter += 1
         thread.start()
+    print(connected_device)
     print('Client connected')
 
 # Close the sockets when the client disconnects
@@ -161,16 +162,14 @@ def index():
 def launch_rocket(rocket_id):
     global global_headers
     try:
-        if request.method == 'GET':
-            rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/launched'
-            headers = global_headers.copy()
-            headers[ 'Content-Type'] = 'application/x-www-form-urlencoded'
-            #print(request.headers)
-            response = make_request_with_retry(rocket_url, headers=headers, method='PUT')
-            # Redirect to the get_rockets route
-            return redirect(url_for('index'))
-    except requests.RequestException as e:
-        return redirect(url_for('index'))
+        rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/launched'
+        headers = global_headers.copy()
+        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        response = make_request_with_retry(rocket_url, headers=headers, method='PUT', id=rocket_id, single=True)
+        print(response)
+        rocket = Rocket(response)
+
+        return jsonify(rocket.get_data()), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -178,14 +177,11 @@ def launch_rocket(rocket_id):
 def deploy_rocket(rocket_id):
     global global_headers
     try:
-        if request.method == 'GET':
-            rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/deployed'
-            #print(request.headers)
-            response = make_request_with_retry(rocket_url, headers=global_headers, method='PUT')
-            # Redirect to the get_rockets route
-            return redirect(url_for('index'))
-    except requests.RequestException as e:
-        return redirect(url_for('index'))
+        rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/deployed'
+        response = make_request_with_retry(rocket_url, headers=global_headers, method='PUT', id=rocket_id, single=True)
+        rocket = Rocket(response)
+        print(response)
+        return jsonify(rocket.get_data()), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -193,17 +189,13 @@ def deploy_rocket(rocket_id):
 def cancel_rocket(rocket_id):
     global global_headers
     try:
-        if request.method == 'GET':
-            rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/launched'
-            #print(request.headers)
-            response = make_request_with_retry(rocket_url, headers=global_headers, method='DELETE')
-            # Redirect to the get_rockets route
-            return redirect(url_for('index'))
-    except requests.RequestException as e:
-        return redirect(url_for('index'))
+        rocket_url = f'{api_endpoint}/rocket/{rocket_id}/status/launched'
+        response = make_request_with_retry(rocket_url, headers=global_headers, method='DELETE', id=rocket_id, single=True)
+        print(response)
+        rocket = Rocket(response)
+        return jsonify(rocket.get_data()), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
-
 
 # Start the Flask app
 if __name__ == '__main__':

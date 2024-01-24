@@ -1,25 +1,30 @@
 import requests
-from urllib.error import HTTPError
 
-def make_request_with_retry(url, headers, method='GET', max_retries=5):
+def make_request_with_retry(url, headers, method='GET', max_retries=5, id=None, single=False):
     for attempt in range(max_retries):
         try:
             if method == 'GET':
                 response = requests.get(url=url, headers=headers)
+                if single is True and id is not None:
+                    print(f"Retrying {method} request (Attempt {attempt + 1})")
+                    return next((item for item in response.json() if item['id'] == id), None)
             elif method == 'PUT':
                 response = requests.put(url=url, headers=headers)
             elif method == 'DELETE':
                 response = requests.delete(url=url, headers=headers)
             else:
-                # Handle other HTTP methods if needed
                 raise ValueError(f"Unsupported HTTP method: {method}")
 
-            response.raise_for_status()  # Raise an HTTPError for bad responses
+            response.raise_for_status()
             return response.json()
-        except requests.exceptions.HTTPError as http_err:
-            if response.status_code == 503 and attempt < max_retries - 1:
-                # Retry the request if it's a 503 error
-                print(f"Retrying {method} request (Attempt {attempt + 1})")
+        except Exception as err:
+            if attempt < max_retries - 1 and isinstance(err, requests.exceptions.HTTPError):
+                if err.response.status_code == 503 or err.response.status_code == 400:
+                    if method in ["PUT", "DELETE"]:
+                        url = "http://localhost:5000/rockets"
+                        if method == "PUT" and "launched" in url:
+                            headers.pop('Content-Type', None)
+                        method="GET"
+                        continue
             else:
-                # Raise the exception if it's not a 503 error or if max_retries is reached
-                print(http_err)
+                print(str(err) + " voila")

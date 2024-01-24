@@ -6,10 +6,10 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Rocket from './Rocket';
-import SocketData from './SocketData';
-import RocketSocketData from './RocketSocketData';
 
-const RocketList = ({ data }) => {
+//import RocketSocketData from './RocketSocketData';
+
+const RocketList = ({ rockets, updateRocket }) => {
   const [socketData, setSocketData] = useState(null);
   const socketRef = useRef(null);
 
@@ -21,8 +21,8 @@ const RocketList = ({ data }) => {
     });
 
     socketRef.current.on('update_data', (allData) => {
-      console.log('I received a message!');
-      console.log(allData);
+      //console.log('I received a message!');
+      //console.log(allData);
       setSocketData(allData);
     });
 
@@ -35,8 +35,8 @@ const RocketList = ({ data }) => {
   }, []); // Re-run the effect when the id or socketDataRef changes
 
   return (
-    <div>
-      {data.map((rocket, index) => (
+    <div styles={{width: "100%"}}>
+      {rockets.map((rocket, index) => (
         <Accordion key={index}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -49,8 +49,8 @@ const RocketList = ({ data }) => {
             </div>
           </AccordionSummary>
           <AccordionDetails>
-            <Rocket rocket={rocket} />
-            {socketData && <RocketSocketData data={socketData.find(rocketData => rocketData.id === rocket.id)} rocketId={rocket.id}/>}
+            {socketData &&<Rocket rocket={rocket} updateRocket={updateRocket} socketData={socketData.find(socketData => socketData.id === rocket.id)} />
+}
           </AccordionDetails>
         </Accordion>
       ))}
