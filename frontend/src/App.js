@@ -37,7 +37,6 @@ function App() {
     fetchData();
   }, []);
 
-<<<<<<< HEAD
   const updateRocket = (updatedRocket) => {
     setData((prevData) => {
       return {
@@ -48,12 +47,11 @@ function App() {
       };
     });
   };
-=======
+
   if (isInitialFetch && isLoading) {
     return <div>Loading...</div>;
   }
 
->>>>>>> d6502e7b04ab2d6b5b3c5de44642db5296f7c7f2
 
   if (isLoading) {
     return <div>Loading...</div>;
