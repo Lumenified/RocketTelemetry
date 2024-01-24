@@ -13,8 +13,9 @@ const theme = createTheme({
 function App() {
   const [data, setData] = useState({rockets: [], weather: {}});
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialFetch, setIsInitialFetch] = useState(true);
 
-  useEffect(() => {
+  const fetchData = () => {
     fetch('http://localhost:8080', {
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
@@ -25,8 +26,20 @@ function App() {
       console.log(data);
       setData(data);
       setIsLoading(false);
+      if (isInitialFetch) {
+        setIsInitialFetch(false);
+      }
     });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  if (isInitialFetch && isLoading) {
+    return <div>Loading...</div>;
+  }
+
 
   if (isLoading) {
     return <div>Loading...</div>;
