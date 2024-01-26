@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect, useState, useMemo} from "react";
 import {
   MDBCard,
   MDBCardBody,
@@ -23,17 +23,40 @@ function Weather({ weather }) {
   const weatherCondition = weather;
   const Temperature = weatherCondition?.temperature;
   const speed = weatherCondition?.wind?.speed;
-  let precipitationIcon;
-  const precipitationTypes = Object.keys(weatherCondition.precipitation);
-  for (let i = 0; i < precipitationTypes.length; i++) {
-    if (weatherCondition.precipitation[precipitationTypes[i]]) {
-      precipitationIcon = <i className={`wi wi-${precipitationTypes[i]}`} style={{ fontSize: '3em' }} />;
-      break;
+  const rain = weatherCondition?.precipitation?.rain;
+  const snow = weatherCondition?.precipitation?.snow;
+  const sleet = weatherCondition?.precipitation?.sleet;
+  const hail = weatherCondition?.precipitation?.hail;
+  const [precipitationIcon, setPrecipitationIcon] = useState(null);
+  const precipitationIcons = useMemo(() => ({
+    rain: 'wi-rain',
+    snow: 'wi-snow',
+    sleet: 'wi-sleet',
+    hail: 'wi-hail',
+    mix: 'wi-rain-mix',
+  }), []);
+  
+  useEffect(() => {
+    let icon = null;
+    if (snow && rain) {
+      icon = <i className={`wi ${precipitationIcons.mix}`} style={{ fontSize: '3em' }}></i>;
     }
-  }
-  if (!precipitationIcon) {
-    precipitationIcon = <i className="wi wi-day-sunny" style={{ fontSize: '3em' }} />;
-  }
+    else if (rain) {
+      icon = <i className={`wi ${precipitationIcons.rain}`} style={{ fontSize: '3em' }}></i>;
+    } else if (snow) {
+      icon = <i className={`wi ${precipitationIcons.snow}`} style={{ fontSize: '3em' }}></i>;
+    } else if (sleet) {
+      icon = <i className={`wi ${precipitationIcons.sleet}`} style={{ fontSize: '3em' }}></i>;
+    } else if (hail) {
+      icon = <i className={`wi ${precipitationIcons.hail}`} style={{ fontSize: '3em' }}></i>;
+    }
+      
+    if (!icon) {
+      icon = <i className="wi wi-day-sunny" style={{ fontSize: '3em' }} />;
+    }
+    setPrecipitationIcon(icon);
+  }, [rain, snow, sleet, hail, precipitationIcons]);
+
   return (
     <MDBCard style={{ width: "100%" }}>
   <MDBCardBody>

@@ -1,10 +1,8 @@
 import Button from '@mui/material/Button';
-import { useState } from 'react';
 import { Grid } from '@mui/material';
 
 function Rocket({ rocket, updateRocket, socketData}) {
   
-  const [rocketData, setRocketData] = useState(rocket);
   const launchRocket = async () => {
     try {
       const response = await fetch(`http://localhost:8080/launch_rocket/${rocket.id}`);
@@ -12,7 +10,7 @@ function Rocket({ rocket, updateRocket, socketData}) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
 
       updateRocket(data);
     } catch (error) {
@@ -27,7 +25,7 @@ function Rocket({ rocket, updateRocket, socketData}) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
   
       updateRocket(data); // Update the rocket data in the parent component
     } catch (error) {
@@ -42,7 +40,7 @@ function Rocket({ rocket, updateRocket, socketData}) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
   
       updateRocket(data); // Update the rocket data in the parent component
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Weather from './components/Weather';
 import RocketList from './components/RocketList';
 import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
@@ -15,37 +15,45 @@ function App() {
   const [data, setData] = useState({rockets: [], weather: {}});
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialFetch, setIsInitialFetch] = useState(true);
-  const [socketData, setSocketData] = useState(null);
-  const socketRef = useRef(null);
-  const updateWeather = (updatedWeather) => {
-    setData((prevData) => {
-      return {
-        ...prevData,
-        weather: updatedWeather,  // Update the weather data
-      };
-    });
-  };
-
-  const fetchData = () => {
-    fetch('http://localhost:8080', {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setData(data);
-      setIsLoading(false);
-      if (isInitialFetch) {
-        setIsInitialFetch(false);
-      }
-    });
-  };
+  /*
+  EventSource is a built-in browser API that allows us to receive server-sent events.
+  */
+  useEffect(() => {
+    const eventSource = new EventSource("http://localhost:8080/weather");
+  
+    eventSource.onmessage = (event) => {
+      const updatedWeather = JSON.parse(event.data);
+      //console.log(updatedWeather);
+      setData(prevData => ({...prevData, weather: updatedWeather}));
+    };
+    
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   useEffect(() => {
+    const fetchData = () => {
+      fetch('http://localhost:8080', {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        //console.log(data);
+        setData(data);
+        setIsLoading(false);
+        if (isInitialFetch) {
+          setIsInitialFetch(false);
+        }
+      });
+    };
+    
+    
+
     fetchData();
-  }, []);
+  }, [isInitialFetch]);
 
   const updateRocket = (updatedRocket) => {
     setData((prevData) => {
@@ -57,7 +65,6 @@ function App() {
       };
     });
   };
-
   if (isInitialFetch && isLoading) {
     return <div>Loading...</div>;
   }
@@ -86,7 +93,7 @@ function App() {
             <MDBCardBody>
               <MDBCardTitle>Rocket List</MDBCardTitle>
               <div>
-                <RocketList rockets={data.rockets} updateRocket={updateRocket} updateWeather={updateWeather}/>
+                <RocketList rockets={data.rockets} updateRocket={updateRocket} />
               </div>
             </MDBCardBody>
           </MDBCard>

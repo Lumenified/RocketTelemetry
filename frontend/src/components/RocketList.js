@@ -26,20 +26,14 @@ const RocketList = ({ rockets, updateRocket, updateWeather }) => {
       setSocketData(allData);
     });
 
-    socketRef.current.on('update_weather', (weatherData) => {
-      //console.log('I received a message!');
-      //console.log(weatherData);
-      console.log(weatherData)
-      updateWeather(weatherData);
-    });
 
     socketRef.current.on('disconnect', () => {
-      console.log("I'm disconnected!");
+      //console.log("I'm disconnected!");
     });
 
     // Clean up the effect
     return () => socketRef.current.disconnect();
-  }, []); // Re-run the effect when the id or socketDataRef changes
+  }, [updateWeather]); // Re-run the effect when the id or socketDataRef changes
 
   return (
     <div styles={{width: "100%"}}>
