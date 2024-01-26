@@ -9,7 +9,7 @@ import Rocket from './Rocket';
 
 //import RocketSocketData from './RocketSocketData';
 
-const RocketList = ({ rockets, updateRocket }) => {
+const RocketList = ({ rockets, updateRocket, updateWeather }) => {
   const [socketData, setSocketData] = useState(null);
   const socketRef = useRef(null);
 
@@ -24,6 +24,13 @@ const RocketList = ({ rockets, updateRocket }) => {
       //console.log('I received a message!');
       //console.log(allData);
       setSocketData(allData);
+    });
+
+    socketRef.current.on('update_weather', (weatherData) => {
+      //console.log('I received a message!');
+      //console.log(weatherData);
+      console.log(weatherData)
+      updateWeather(weatherData);
     });
 
     socketRef.current.on('disconnect', () => {

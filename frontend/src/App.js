@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Weather from './components/Weather';
 import RocketList from './components/RocketList';
 import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
@@ -15,6 +15,16 @@ function App() {
   const [data, setData] = useState({rockets: [], weather: {}});
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialFetch, setIsInitialFetch] = useState(true);
+  const [socketData, setSocketData] = useState(null);
+  const socketRef = useRef(null);
+  const updateWeather = (updatedWeather) => {
+    setData((prevData) => {
+      return {
+        ...prevData,
+        weather: updatedWeather,  // Update the weather data
+      };
+    });
+  };
 
   const fetchData = () => {
     fetch('http://localhost:8080', {
@@ -76,7 +86,7 @@ function App() {
             <MDBCardBody>
               <MDBCardTitle>Rocket List</MDBCardTitle>
               <div>
-                <RocketList rockets={data.rockets} updateRocket={updateRocket} />
+                <RocketList rockets={data.rockets} updateRocket={updateRocket} updateWeather={updateWeather}/>
               </div>
             </MDBCardBody>
           </MDBCard>

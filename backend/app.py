@@ -11,6 +11,9 @@ from flask_cors import CORS
 from RocketModel import Rocket
 from WeatherModel import Weather
 
+############################################################################################################
+            # Global variables
+############################################################################################################
 # Create the Flask app
 app = Flask(__name__)
 CORS(app, origins='http://localhost:3000')
@@ -37,7 +40,9 @@ api_endpoint = 'http://localhost:5000/'
 # Global headers
 global_headers = {'x-api-key': 'API_KEY_1'}
 
-
+############################################################################################################
+            # Helper functions
+############################################################################################################
 def connect_to_port(port):
     sock = None
     try:
@@ -97,6 +102,9 @@ def fetch_data(sockets):
         except Exception as e:
             pass
         time.sleep(0.1)
+        if not should_continue:
+            break
+
 
 def check_sockets():
     global sockets
@@ -107,9 +115,29 @@ def check_sockets():
             sock = connect_to_port(port)
             sockets.append(sock)
 
-# Connect to each port and store the socket
 
-#print(len(sockets))
+def update_weather():
+    while should_continue:
+        try:
+            global weather
+            start_time = time.time()
+            weather = make_request_with_retry(f'{api_endpoint}/weather', global_headers)
+            end_time = time.time()
+            weather_instance = Weather(weather)
+            socketio.emit('update_weather', weather_instance.get_data())
+        except Exception as e:
+            pass
+        elapsed_time = end_time - start_time
+        print(elapsed_time)
+        time.sleep(10-elapsed_time)
+        if not should_continue:
+            break
+
+
+
+############################################################################################################
+            # Rocket SocketIO event handlers
+############################################################################################################
 # Start the Flask-SocketIO server
 @socketio.on('connect')
 def handle_connect():
@@ -118,9 +146,11 @@ def handle_connect():
     if connected_device == 1 and thread_counter == 0:
         check_sockets()
         should_continue = True
-        thread = threading.Thread(target=fetch_data, args=(sockets,))
-        thread_counter += 1
-        thread.start()
+        thread_rocket_data = threading.Thread(target=fetch_data, args=(sockets,))
+        update_weather_thread = threading.Thread(target=update_weather)
+        thread_counter += 2
+        thread_rocket_data.start()
+        update_weather_thread.start()
     print(connected_device)
     print('Client connected')
 
@@ -139,6 +169,25 @@ def handle_disconnect():
     #print(sockets)
     print('Client disconnected')
 
+
+############################################################################################################
+            # Weather SocketIO event handlers
+############################################################################################################
+
+def update_weather():
+    while should_continue:
+        try:
+            global weather
+            weather = make_request_with_retry(f'{api_endpoint}/weather', global_headers)
+            weather_instance = Weather(weather)
+            socketio.emit('update_weather', weather_instance.get_data())
+        except Exception as e:
+            pass
+        time.sleep(0.1)
+
+############################################################################################################
+            # Flask routes
+############################################################################################################
 # Start the data fetching function in a separate thread
 @app.route('/', methods=['GET'])
 def index():
@@ -197,6 +246,10 @@ def cancel_rocket(rocket_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+
+############################################################################################################
+            # Main function
+############################################################################################################
 # Start the Flask app
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=8080, debug=True)
