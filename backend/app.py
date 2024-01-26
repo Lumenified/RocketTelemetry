@@ -157,10 +157,9 @@ def sse_format(data):
 def weather():
     def generate():
         while True:
-            time.sleep(3)
+            time.sleep(5)
             data = fetch_weather_data()
             yield sse_format(data)
-            time.sleep(2)
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 #######################################################################################
