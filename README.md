@@ -14,11 +14,11 @@ Then activate it.
 
 ### **For windows:**
 Run Powershell. Before the activation, you should check the Execution policy by typing ```get-ExecutionPolicy```. If you see that It's "restricted" then you can start a session by typing:
-```bash
+```powershell
 Set-ExecutionPolicy Unrestricted -Scope Process
 ```
 then to activate the virtualenv
-```bash
+```powershell
 ./venv/Scripts/activate
 ```
 ### **For linux:**
