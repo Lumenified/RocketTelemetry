@@ -6,7 +6,7 @@ Change directory to backend by typing:
 ```bash
 cd ./backend
 ```
-Create the virtualenv in python: // There is a built-in modules called "venv"
+Create the virtualenv in python: // There is a built-in module called "venv"
 ```bash
 python -m venv venv
 ```
