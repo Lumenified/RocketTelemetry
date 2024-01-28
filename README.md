@@ -6,16 +6,21 @@ Change directory to backend by typing:
 ```bash
 cd ./backend
 ```
-Create the virtualenv in python: // If you don't have please install by typing **"python -m pip install virtualenv"** and if you get an error such as "error: externally-managed-environment" **"sudo apt install python3-virtualenv"**
+Create the virtualenv in python: // There is a built-in modules called "venv"
 ```bash
-python -m virtualenv venv
+python -m venv venv
 ```
 Then activate it.
-For windows: 
+**####For windows:** 
+Run Powershell. Before the activation, you should check the Execution policy by typing ```get-ExecutionPolicy```. If you see that It's "restricted" then you can start a session by typing:
+```bash
+Set-ExecutionPolicy Unrestricted -Scope Process
+```
+then to activate the virtualenv
 ```bash
 ./venv/Scripts/activate
 ```
-For linux: 
+**####For linux:** 
 ```bash
 source ./venv/bin/activate
 ```
