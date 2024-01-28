@@ -11,7 +11,7 @@ Create the virtualenv in python: // There is a built-in modules called "venv"
 python -m venv venv
 ```
 Then activate it.
-**####For windows:** 
+**###For windows:** 
 Run Powershell. Before the activation, you should check the Execution policy by typing ```get-ExecutionPolicy```. If you see that It's "restricted" then you can start a session by typing:
 ```bash
 Set-ExecutionPolicy Unrestricted -Scope Process
@@ -20,7 +20,7 @@ then to activate the virtualenv
 ```bash
 ./venv/Scripts/activate
 ```
-**####For linux:** 
+**###For linux:** 
 ```bash
 source ./venv/bin/activate
 ```
