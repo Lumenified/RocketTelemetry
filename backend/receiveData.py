@@ -2,7 +2,7 @@ import math
 import struct
 
 # Create a function to receive data from the socket
-def receive_data(sock):
+def receive_data(sock, active=True):
     '''
     Receive data from the socket and return a dictionary of the data
     

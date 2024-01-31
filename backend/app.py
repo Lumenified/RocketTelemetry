@@ -107,19 +107,33 @@ def fetch_data(sockets):
     Returns:
         None
     '''
+def fetch_data(sockets):
     global should_continue
+    previous_values = {}  # Store the last correct data for each rocket
     while should_continue:
         try:
             rocket_data = []
-            #print(len(sockets))
             for i, sock in enumerate(sockets):
                 if sock.fileno() != -1:  # Check if the socket is still open
                     value = receive_data(sock)
-                    rocket_data.append(value)
+                    if value['id'] not in previous_values or not is_significantly_different(previous_values[value['id']], value):
+                        previous_values[value['id']] = value
+                    if value['id'] in previous_values:
+                        rocket_data.append(previous_values[value['id']])
             socketio.emit('update_data', rocket_data)
         except Exception as e:
             pass
         time.sleep(0.1)
+
+def is_significantly_different(previous_value, current_value):
+    # Define a threshold for each field
+    thresholds = {
+        'temperature': 1
+    }
+    for field in thresholds:
+        if abs(previous_value[field] - current_value[field]) > thresholds[field]:
+            return True
+    return False
 
 # Connect to each port and store the socket
 def check_sockets():
