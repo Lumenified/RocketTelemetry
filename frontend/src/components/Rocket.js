@@ -9,10 +9,12 @@ function Rocket({ rocket, updateRocket, socketData}) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      //console.log(data);
-
-      updateRocket(data);
+  
+      // Add a delay before fetching the rocket data
+      setTimeout(async () => {
+        const data = await response.json();
+        updateRocket(data);
+      }, 500); // Delay for 1 second
     } catch (error) {
       console.error('Failed to launch rocket:', error);
     }
@@ -82,7 +84,7 @@ function Rocket({ rocket, updateRocket, socketData}) {
       <Button variant="contained" color="secondary" style={{margin: '3%'}} onClick={launchRocket} disabled={rocket.status === "launched"}>
         Launch
       </Button>
-      <Button variant="contained" color="error" style={{margin: '3%'}} onClick={cancelRocket} disabled={rocket.status === 'deployed' || rocket.status === 'cancelled'}>
+      <Button variant="contained" color="error" style={{margin: '3%'}} onClick={cancelRocket} disabled={rocket.status === 'deployed' || rocket.status === 'cancelled' || rocket.status === 'waiting'}>
         Cancel
       </Button>
     </Grid>
